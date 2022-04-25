@@ -13,7 +13,7 @@
     <!--multipart/form-data 複数の種類のデータを一度に扱える形式-->
     <form enctype="multipart/form-data">
         <!--input: 入力エリアの作成 type="file": ファイル名を入力 name:入力フィールド名-->
-        <input type="file" name="img">
+        <input type="file" name="file">
         <!--formmethod HTTPメソッド-->
         <button type="submit" formmethod="post">POST</button></p>
         {% if img_path %}
@@ -22,6 +22,11 @@
         </div>
         <p>{{ img_path }}</p>
         {% endif %}
+        <script>
+            if (img_path !== null) {
+                document.write('<img src="{{ img_path }}" style="width: 300px;">')
+            }
+        </script>
     </form>
 </body>
 

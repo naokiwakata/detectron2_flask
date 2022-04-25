@@ -43,7 +43,7 @@ def predict_img():
     elif request.method == 'POST':
 
         # POSTにより受け取った画像を読み込む
-        stream = request.files['img'].stream
+        stream = request.files['file'].stream
         img_array = np.asarray(bytearray(stream.read()), dtype=np.uint8)
         img = cv2.imdecode(img_array, 1)
         # 現在時刻を名前として「imgs/」に保存する
