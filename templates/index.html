@@ -22,6 +22,12 @@
         </div>
         <p>{{ img_path }}</p>
         {% endif %}
+
+        {% if img_paths %}
+        {% for img_path in img_paths %}
+        <img src="{{ img_path }}" style="width: 100px;">
+        {% endfor %}
+        {% endif %}
     </form>
 </body>
 

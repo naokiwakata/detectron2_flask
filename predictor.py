@@ -9,10 +9,12 @@ from detectron2.data import MetadataCatalog
 from detectron2.utils.visualizer import Visualizer
 import datetime
 
+
 class Predictor:
     _metadata = None
     _predictor = None
     _outputs = None
+    _original_img = None
     _img = None
     _img_dir = "static/imgs/"
     _img_paths = []
@@ -45,13 +47,13 @@ class Predictor:
     @property
     def img(self):
         return self._img
-    
+
     @property
     def img_paths(self):
-        return self._img
+        return self._img_paths
 
     def predict(self, img):
-
+        self._original_img = img
         self._outputs = self._predictor(img)
         v = Visualizer(img[:, :, ::-1],
                        metadata=self._metadata,
@@ -62,19 +64,19 @@ class Predictor:
         return self._outputs
 
     def processImage(self):
+        self._img_paths = []
         boxes = self._outputs["instances"].pred_boxes
         tensor = boxes.tensor
         number_box = boxes.tensor.shape[0]
 
         for i in range(number_box):
             box = tensor[i]
-            x1 = round(box[0].item())-10  # 画像の表示領域を10px広くする
-            y1 = round(box[1].item())-10
-            x2 = round(box[2].item())+10
-            y2 = round(box[3].item())+10
-            cut_img = self._img[y1:y2, x1:x2]
+            x1 = round(box[0].item())-5  # 画像の表示領域を10px広くする
+            y1 = round(box[1].item())-5
+            x2 = round(box[2].item())+5
+            y2 = round(box[3].item())+5
+            cut_img = self._original_img[y1:y2, x1:x2]
             dt_now = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
             img_path = self._img_dir + dt_now + ".jpg"
             self._img_paths.append(img_path)
             cv2.imwrite(img_path, cut_img)
-
